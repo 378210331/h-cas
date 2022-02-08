@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登出页面</title>
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js//layui/layui.js}"></script>
+</head>
+<body>
+<input type="hidden" name="service"  id="service" th:value="${service}">
+</body>
+<script>
+        var service = getUrlParam("service");
+        var token = localStorage.getItem("TGC");
+        if(token){
+            $.ajax({
+                type: "GET",
+                url: "/cas/handleLogout",
+                async: false,
+                beforeSend: function(request) {
+                    request.setRequestHeader("Authorization", token);
+                },
+                success: function(res) {
+                    if(res.success){
+                        localStorage.removeItem("TGC");
+                        if(service){
+                            window.location.replace( "/cas/login?service=" + service);
+                        }else{
+                            window.location.replace( "/cas/login");
+                        }
+                    }else{
+                        localStorage.removeItem("TGC");
+                    }
+                },
+                error: function (e){
+                    localStorage.removeItem("TGC");
+                }
+            });
+        }else{
+            if(service){
+                window.location.replace( "/cas/login?service=" + service);
+            }else{
+                window.location.replace( "/cas/login");
+            }
+        }
+
+
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg); //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+</script>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>服务管理页面</title>
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js//layui/layui.js}"></script>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+</head>
+<body style="padding: 30px">
+<style>
+    td > a {
+        color: #0ea3fd;
+        padding: 5px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="layui-form"><!--查询表单-->
+    <div class="layui-inline">
+    <div class="layui-form-item">
+        <label class="layui-form-label">服务名称</label>
+        <div class="layui-input-inline" style="width: 200px">
+            <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-inline" style="width: 200px">
+            <input type="text" name="description" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">服务路径</label>
+        <div class="layui-input-inline" style="width: 200px">
+            <input type="text" name="serviceid" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="status" value="0" title="关闭">
+            <input type="radio" name="status" value="1" title="开启" checked>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="query" id="query">查询</button>
+            <button class="layui-btn layui-btn-primary" onclick="handleNew()">新建服务</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<table class="layui-table"><!--结果表格-->
+    <colgroup>
+        <col width="100">
+        <col width="200">
+        <col width="300">
+        <col width="300">
+        <col width="300">
+        <col width="100">
+        <col width="100">
+        <col width="100">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>服务名称</th>
+        <th>服务路径</th>
+        <th>登出路径</th>
+        <th>描述</th>
+        <th>排序(asc)</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+</table>
+
+<div style="display: none;padding: 15px" id="editArea"> <!--新增/编辑表单-->
+    <div class="layui-form" lay-filter="editForm">
+        <input type="hidden" name="id">
+        <div class="layui-form-item">
+            <label class="layui-form-label" >服务名称</label>
+            <div class="layui-input-block" style="width: 300px">
+                <input type="text" name="name" required  lay-verify="required" placeholder="请输入服务名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" >服务路径</label>
+            <div class="layui-input-inline" style="width: 600px">
+                <input type="text" name="serviceid" required lay-verify="required" placeholder="请输入服务路径匹配" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">支持正则表达式的客户端地址</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" >登出路径</label>
+            <div class="layui-input-inline" style="width: 600px">
+                <input type="text" name="logoutUrl" required lay-verify="required" placeholder="请输入登出路径" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">接收统一登出请求的处理路径</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" >描述</label>
+            <div class="layui-input-block" style="width: 300px">
+                <textarea name="description" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" >排序(asc)</label>
+            <div class="layui-input-block" style="width: 300px">
+                <input type="number" name="evaluationOrder" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" >状态</label>
+            <div class="layui-input-block" style="width: 300px">
+                <input type="radio" name="status" value="0" title="关闭">
+                <input type="radio" name="status" value="1" title="开启" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+    var token = localStorage.getItem("TGC");
+    if(! token) {
+        location.replace("/cas/login");
+    }
+    var tbodyTemplate = "<td>{id}</td><td>{name}</td><td>{serviceid}</td><td>{logoutUrl}</td><td>{description}</td><td>{evaluationOrder}</td><td>{statusName}</td><td>" +
+        "<a onclick=\"edit('{id}')\">编辑</a>&nbsp;<a onclick=\"del('{id}','{name}')\">删除</a></td>"
+
+    layui.use('form', function(){
+        var form = layui.form;
+        form.on('submit(save)', function(data){ // 存储服务信息
+            var submitData = data.field;
+            if(! submitData.id){
+                $.ajax({
+                    type: "POST",
+                    url:"/cas/casServices",
+                    contentType: "application/json",
+                    dataType: "json",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", token);
+                    },
+                    data:JSON.stringify(submitData),
+                    success:function (res){
+                    if(res.success){
+                        layer.closeAll();
+                        layer.msg("新增成功");
+                        $('#query').click();
+                    }else{
+                        layer.msg("新增失败:" + res.message);
+                    }
+                }})
+            }else{ // 更新服务信息
+                $.ajax({
+                    type: "put",
+                    url:"/cas/casServices",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data:JSON.stringify(submitData),
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", token);
+                    },
+                    success:function (res){
+                        if(res.success){
+                            layer.closeAll();
+                            layer.msg("修改成功");
+                            $('#query').click();
+                        }else{
+                            layer.msg("修改失败:" + res.message);
+                        }
+                    }})
+            }
+        });
+
+        form.on('submit(query)', function(data){ // 查询服务客户端
+            $.ajax({
+                type: "get",
+                url:"/cas/casServices",
+                data:data.field,
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", token);
+                },
+                success:function (res){
+                    $('#tbody').html("");
+                    if(res.success){
+                        var html  = "";
+                        for(var i = 0; i < res.result.length; i++) {
+                            var temp = tbodyTemplate;
+                            var item = res.result[i];
+                            item.status === '1'?item.statusName = "开启" : item.statusName = "关闭"
+                            for (var k in item) {
+                                temp = temp.replaceAll("{" + k + "}",item[k]?item[k]:'-')
+                            }
+                            html = html + "<tr>" + temp + "</tr>";
+                        }
+                        $('#tbody').html(html);
+                    }
+                }})
+            return false;
+        });
+    });
+
+    /**
+     * 编辑
+     * @param id
+     */
+    function edit(id){
+        $.ajax({
+            type: "get",
+            url:"/cas/casServices/" + id,
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", token);
+            },
+            success:function(res){
+            if(res.success && res.result){
+                layui.form.val("editForm",res.result);
+                layer.open({
+                    type: 1,
+                    title:"编辑",
+                    area: ['1000px', '600px'],
+                    content: $('#editArea') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                });
+            }else{
+                layer.msg(res.message);
+            }
+            }});
+    }
+
+    /**
+     * 删除
+     * @param id
+     * @param name
+     */
+    function del(id,name){
+        layer.confirm('确定删除服务' + name + "?", {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+               url:"/cas/casServices/" + id,
+                type:"delete",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", token);
+                },
+                success:function (result) {
+                     if(result.success){
+                         $('#query').click();
+                     }else{
+                         layer.msg(result.message);
+                     }
+               }});
+            layer.close(index);
+        });
+    }
+
+    /**
+     * 处理点击"新增"
+     */
+    function handleNew(){
+            layui.form.val("editForm", {
+                id:"",
+                name:"",
+                serviceid:"",
+                description:"",
+                evaluationOrder:1,
+                status:'1'
+            });
+            layer.open({
+                type: 1,
+                title:"新增",
+                area: ['1000px', '600px'],
+                content: $('#editArea') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+            });
+    }
+
+    /**
+     * 页面加载完成，自动查询
+     */
+    $(function (){
+        $('#query').click();
+    })
+</script>
+</html>

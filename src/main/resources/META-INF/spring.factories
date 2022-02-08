@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.hsy.cas.config.RedisAutoConfig,\
+  com.hsy.cas.config.MybatisPlusAutoConfig,\
+  com.hsy.cas.config.SwaggerConfig,\
+  com.hsy.cas.config.CasAutoConfig

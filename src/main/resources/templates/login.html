@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/casBase.js}"></script> <!--基础cas函数,一定要引入-->
+    <script th:src="@{/js/sm3js/core.js}"></script>
+    <script th:src="@{/js/sm3js/cipher-core.js}"></script>
+    <script language="JavaScript" type="text/javascript" th:src="@{/js/sm3js/jsbn.js}"></script>
+    <script language="JavaScript" type="text/javascript" th:src="@{/js/sm3js/jsbn2.js}"></script>
+    <script language="JavaScript" type="text/javascript" th:src="@{/js/sm3js/sm3.js}"></script>
+    <link rel="stylesheet" href="../static/css/login/normalize.min.css" th:href="@{/css/login/normalize.min.css}"/>
+    <link rel="stylesheet" href="../static/css/login/common.css" th:href="@{/css/login/common.css}"/>
+    <link rel="stylesheet" href="../static/css/login/components.css" th:href="@{/css/login/components.css}"/>
+    <link rel="stylesheet" href="../static/css/login/login.css" th:href="@{/css/login/default.css}"/>
+</head>
+<body>
+<input type="hidden" name="service" id="service" th:value="${service}">
+
+<div class="login-wrap" id="login-wrap" style="display: none">
+    <div class="login-bg">
+        <img class="login-bg-img" src="images/login/login-bg.png" alt="">
+    </div>
+    <div class="logo">
+        <!--<img class="logo-img" src="images/login/logo.png" alt="">-->
+    </div>
+    <div class="content-wrap">
+        <div class="left-wrap hide">
+            <div class="title">
+                <p class="bottom-tilte">安全可靠，广泛兼容</p>
+            </div>
+        </div>
+        <div class="right-wrap">
+            <form class="login-form" method="post" id="fm1" >
+                <div class="login-box" id="user_box">
+                    <p class="login-mess">账户登录</p>
+                    <p class="login-name">
+                        <span class="icon-name hide"></span>
+                        <img class="icon" src="images/login/user.png" alt="">
+                        <input  id="username" size="25" tabindex="1" type="text"  name="username"  autocomplete="off" placeholder="请输入账号"/>
+                    </p>
+                    <p class="login-password">
+                        <span class="icon-password hide"></span>
+                        <img class="icon" src="images/login/pwd.png" alt="">
+                        <input type="password" id="password" size="25" tabindex="2" name="password" autocomplete="off" placeholder="请输入密码"/>
+                        <button class="hide-pass hide" type="button"></button>
+                    </p>
+                    <p class="login-tip" style="display: none;">
+                        <span class="icon-tip"></span><span class="tip"></span>
+                    </p>
+
+                    <div class="re-box">
+                        <div class="re-left" id="con_checkbox">
+                            <input id="re_pwd" class="re-pwd" type="checkbox" value="" />
+                            <span class="ant-tree-checkbox" id="checkbox">
+                                        <span class="ant-tree-checkbox-inner"></span>
+                                    </span>
+                            <span>记住密码</span>
+                        </div>
+                        <div class="re-right">
+                            <a id="forget_password" href="">忘记密码</a>
+                        </div>
+                    </div>
+                    <!--          <p class="login-validate">
+                                  <span class="left"><span class="icon-validate"></span>
+                                      <input type="text" placeholder="请在此输入验证码"/></span>
+                                      <span class="right"><img alt="验证码" title="验证码" src="../../images/login/genimage.png">
+                                      <span class="change" title="换一张">换一张</span></span>
+                              </p>-->
+                    <p id="login_btn" class="login-btn">
+                        <button type="button">登录</button>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function doSM3(msg) {
+        var msgData = CryptoJS.enc.Utf8.parse(msg);
+        var sm3keycur = new SM3Digest();
+        msgData = sm3keycur.GetWords(msgData.toString());
+        sm3keycur.BlockUpdate(msgData, 0, msgData.length);
+        var c3 = new Array(32);
+        sm3keycur.DoFinal(c3, 0);
+        for(var i = 0,len = c3.length; i < len; i++){
+            if(256 == c3[i]){
+                c3[i]=0;
+            }
+        }
+        return sm3keycur.GetHex(c3).toString();
+    }
+
+    function handleSubmit() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        password = doSM3(password);
+        $.post("/cas/accountLogin", {username: username, password: password}, function (res) {
+            if (res.success) {
+                afterLoginSuccess(res.result.token,res.result.ticket);
+            } else {
+                layer.msg(res.message);
+            }
+        })
+    }
+
+    /**
+     * 页面加载完成执行
+     */
+    $(function() {
+        if (!isLogin()) {
+            $("#login-wrap").show()
+        }
+        var $re_pwd = $('#re_pwd')
+        var $con_checkbox = $('#con_checkbox')
+        var $login_btn = $('#login_btn')
+        $con_checkbox.click(function () {
+            if ($re_pwd.prop("checked")) {
+                $re_pwd.attr('checked', false)
+                $('#checkbox').removeClass('ant-tree-checkbox-checked')
+            } else {
+                $re_pwd.attr('checked', 'checked')
+                $('#checkbox').addClass('ant-tree-checkbox-checked')
+            }
+        })
+
+        $login_btn.click(function () {
+            if ($re_pwd.prop("checked")) {
+                const user = {
+                    username: $('#username').val(),
+                    password: $('#password').val()
+                };
+                window.localStorage.setItem("rememberMe", JSON.stringify(user))
+            } else {
+                window.localStorage.removeItem("rememberMe")
+            }
+            const user = window.localStorage.getItem("rememberMe");
+            if (user) {
+                $re_pwd.attr('checked', 'checked')
+                $('#checkbox').addClass('ant-tree-checkbox-checked')
+                var user_obj = JSON.parse(user)
+                $('#username').val(user_obj.username)
+                $('#password').val(user_obj.password)
+            }
+            handleSubmit();
+        });
+    });
+</script>
+</html>

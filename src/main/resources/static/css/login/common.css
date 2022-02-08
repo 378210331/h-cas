@@ -1,0 +1,166 @@
+@charset "UTF-8";
+*,
+:before,
+:after {
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box; }
+
+body,
+input,
+textarea,
+button,
+section {
+  color: #333;
+  font-size: 14px;
+  font-family: "-apple-system", "SF UI Text", "Arial", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "sans-serif" !important;
+  font-style: normal; }
+
+ul,
+li {
+  list-style: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+a {
+  color: #333;
+  text-decoration: none;
+  cursor: pointer; }
+
+a:hover,
+a:active {
+  text-decoration: underline; }
+
+img,
+input[type="checkbox"],
+input[type="radio"],
+button {
+  border: 0; }
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="number"] {
+  padding: 4px 5px;
+  line-height: 1;
+  vertical-align: middle; }
+
+textarea {
+  padding: 4px 5px;
+  resize: none; }
+
+button {
+  cursor: pointer; }
+
+.clear {
+  clear: both; }
+
+.clear:after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  clear: both;
+  overflow: hidden; }
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 10px; }
+
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+  border-radius: 12px;
+  background: transparent;
+  display: none; }
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: #c7d8e0; }
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: transparent; }
+
+body .bj-layer-frame {
+  border-radius: 4px; }
+  body .bj-layer-frame .layui-layer-title {
+    height: 46px;
+    line-height: 46px;
+    font-size: 16px;
+    font-weight: bold; }
+body .layui-btn {
+  border-radius: 4px; }
+body .layui-btn-normal {
+  background-color: #009af5; }
+body .layui-laydate {
+  margin-top: 0;
+  box-shadow: 0 0 5px #ccc; }
+body .laydate-month-list > li {
+  margin: 10px 0; }
+body .layui-laydate-list {
+  padding: 0 10px; }
+body .layui-laydate-list > li {
+  height: 30px;
+  line-height: 30px; }
+body .layui-laydate-header {
+  padding-top: 5px;
+  border-bottom: 0; }
+body .layui-laydate-header i {
+  top: 5px;
+  font-size: 14px; }
+body .layui-laydate-content {
+  padding: 0 10px; }
+body .layui-laydate-content th {
+  color: #888; }
+body .layui-laydate-content td,
+body .layui-laydate-content th {
+  height: 24px;
+  padding: 5px 0; }
+body .layui-laydate .layui-this {
+  background-color: #4696f9 !important;
+  border-radius: 3px; }
+body .layui-laydate-header i:hover,
+body .layui-laydate-header span:hover {
+  color: #009af5; }
+body .layui-laydate-content td.laydate-selected {
+  background-color: #c6dfff; }
+body .layui-laydate-footer span:hover {
+  color: #009af5; }
+body .layui-btn {
+  height: 36px;
+  line-height: 1; }
+body .layui-btn-normal {
+  background-color: #008aff; }
+  body .layui-btn-normal:hover {
+    opacity: 1;
+    background-color: #418be7; }
+  body .layui-btn-normal:active {
+    background-color: #337ace; }
+body .layui-btn-normal {
+  background-color: #008aff; }
+  body .layui-btn-normal:hover {
+    opacity: 1;
+    background-color: #418be7; }
+  body .layui-btn-normal:active {
+    opacity: 1;
+    background-color: #337ace; }
+body .layui-btn-primary {
+  background-color: #fff;
+  border-color: #dde0e6; }
+  body .layui-btn-primary:hover {
+    opacity: 1;
+    color: #418be7;
+    border-color: #418be7; }
+  body .layui-btn-primary:active {
+    opacity: 1;
+    color: #337ace;
+    border-color: #337ace; }
+
+/*# sourceMappingURL=common.css.map */

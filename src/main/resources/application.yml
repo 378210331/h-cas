@@ -1,0 +1,32 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jmx:
+    enabled: false
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:test}
+  application:
+    name: cas
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  #json 时间戳统一转换
+  jackson:
+    date-format:   yyyy-MM-dd HH:mm:ss
+    time-zone:   GMT+8
+  aop:
+    proxy-target-class: true
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  thymeleaf:
+    enabled: true  #开启thymeleaf视图解析
+    encoding: utf-8  #编码
+    prefix: classpath:/templates/  #前缀
+    cache: false  #是否使用缓存
+    mode: LEGACYHTML5  #非严格的HTML语法模式
+    suffix: .html  #后缀名
+
+mybatis-plus:
+  mapper-locations: classpath*:com/hsy/**/xml/*Mapper.xml
+

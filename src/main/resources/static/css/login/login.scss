@@ -1,0 +1,291 @@
+@charset "utf-8";
+@import "../common/mixin.scss";
+html,
+body {
+	width: 100%;
+	height: 100%;
+}
+#container {
+	background-size: cover;
+}
+
+.login-wrap {
+	position: absolute;
+	width: 86%;
+	height: 70%;
+	left: 7%;
+	top: 15%;
+}
+
+.login-wrap .content-wrap {
+	width: 100%;
+	height: 100%;
+}
+
+.login-wrap .content-wrap .left-wrap {
+	position: relative;
+	width: 60%;
+	height: 100%;
+	background-color: blue;
+	float: left;
+	background: url("../../images/login/left-bg.png") no-repeat;
+	background-size: cover;
+}
+
+.login-wrap .content-wrap .right-wrap {
+	position: relative;
+	width: 40%;
+	height: 100%;
+	background-color: #fff;
+	float: left;
+}
+
+.login-wrap .content-wrap .left-wrap .title {
+	position: absolute;
+	width: 70%;
+	height: auto;
+	top: 12%;
+	left: 7%;
+	color: #fff;
+}
+
+.title .top-tilte {
+	font-weight: bolder;
+	font-size: 40px;
+}
+
+.title .bottom-tilte {
+	font-size: 25px;
+	margin-top:15px;
+}
+
+.login-wrap .content-wrap .right-wrap .login-form {
+	position: absolute;
+	width: 80%;
+	height: 80%;
+	left: 10%;
+	top: 10%;
+}
+
+.login-form .login-mess {
+	color: rgb(0,154,245);
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 14%;
+}
+
+.login-form .login-name{
+	display: inline-block;
+	width: 100%;
+	height: 10%;
+	border: 1px solid rgba(220, 220, 220, 0.8);
+	border-radius: 5px;
+	margin-bottom: 5%;
+}
+
+.login-form .login-password {
+	display: inline-block;
+	width: 100%;
+	height: 10%;
+	border: 1px solid rgba(220, 220, 220, 0.8);
+	border-radius: 5px;
+	margin-bottom: 5%;
+}
+
+.login-form .login-validate{
+	display: inline-block;
+	width: 100%;
+	height: 10%;
+	/*border: 1px solid rgba(220, 220, 220, 0.8);*/
+	border-radius: 5px;
+	margin-bottom: 5%;
+}
+
+.login-form .left{
+	display: inline-block;
+	width: 60%;
+	height: 100%;
+	border: 1px solid rgba(220, 220, 220, 0.8);
+	border-radius: 5px;
+}
+
+.login-validate img{
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: 10px;
+    width: 60%;
+    border: 1px solid rgba(220, 220, 220, 0.8);
+    border-radius: 4px;
+}
+
+.login-validate .change{
+    color: blue;
+    cursor: pointer;
+    width: 12%;
+}
+
+.login-form .login-tip
+	{
+	display: inline-block;
+	width: 100%;
+	height: 8%;
+	margin-bottom: 0%;
+}
+.login-form .login-forget
+	{
+	display: inline-block;
+	width: 100%;
+	height: 8%;
+	margin-bottom: 3%;
+}
+
+.login-form .login-btn
+	{
+	display: inline-block;
+	width: 100%;
+	height: 10%;
+}
+
+.login-tip .tip {
+	padding: 0px;
+    width: auto;
+    height: 40px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 5px;
+    color:red;
+}
+.login-forget .forget {
+	padding: 0px;
+    width: 95%;
+    height: 40px;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 40px;
+    padding-left: 5px;
+}
+
+.login-forget a {
+	float: right;
+}
+
+.forget span{
+    float: left;
+}
+
+.login-name input {
+	display: inline-block;
+	width: 90%;
+	font-size: 25px;
+	height: 100%;
+	border: 0;
+}
+
+.login-password input {
+	display: inline-block;
+	width: 80%;
+	font-size: 25px;
+	height: 100%;
+	border: 0;
+}
+
+.login-validate input {
+	display: inline-block;
+	width: 82%;
+	height: 100%;
+	border: 0;
+}
+
+.login-password button {
+	display: inline-block;
+	width: 10%;
+	height: 100%;
+	border: 0;
+	background: url("../../images/login/unsee.png") no-repeat center
+		transparent;
+	vertical-align: middle;
+}
+
+.show-pass{
+   background: url("../../images/login/see.png") no-repeat center
+		transparent !important;
+}
+
+.login-password .icon-password {
+	display: inline-block;
+	width: 10%;
+	height: 100%;
+	float: left;
+	background: url("../../images/login/password.png") no-repeat center
+		transparent;
+    vertical-align: middle;
+}
+
+.login-name .icon-name {
+	display: inline-block;
+	width: 10%;
+	height: 100%;
+	float: left;
+	background: url("../../images/login/username.png") no-repeat center
+		transparent;
+}
+
+.login-validate .icon-validate {
+	display: inline-block;
+	width: 17%;
+	height: 100%;
+	float: left;
+	background: url("../../images/login/validate.png") no-repeat center
+		transparent;
+}
+
+.login-tip .icon-tip {
+	display: inline-block;
+	width: 5%;
+	height: 40px;
+	float: left;
+	background: url("../../images/login/tip.png") no-repeat center
+		transparent;
+}
+
+.login-forget .icon-forget {
+	display: inline-block;
+	width: 5%;
+	height: 40px;
+	float: left;
+	background: url("../../images/login/uncheck.png") no-repeat center
+		transparent;
+}
+
+.show-forget{
+    background: url("../../images/login/check.png") no-repeat center
+		transparent !important;
+}
+
+.login-btn input {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	background-color: rgb(0,154,245);
+	color: #fff;
+	text-align: center;
+	font-size: 20px;
+	line-height: 100%;
+	border-radius:5px;
+        box-shadow: 3px 3px 3px rgb(220,220,220);
+}
+.border-red{
+    border:1px solid red !important;
+    margin-bottom:1% !important;
+}
+
+.right{
+    float: right;
+    width: auto;
+    position: relative;
+    display: inline-block;
+    height: 100%;
+}
